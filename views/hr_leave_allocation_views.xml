@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Employee Allocation Form View Extension -->
+    <record id="hr_leave_allocation_view_form_inherit_balance" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.view.form.inherit.balance</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='duration_display']" position="after">
+                <div class="o_td_label">
+                    <label for="leaves_taken" string="Time Off Taken"/>
+                </div>
+                <div name="leaves_taken_display">
+                    <field name="leaves_taken" nolabel="1" style="width: 6ch;" readonly="1"/>
+                    <span class="ml8" invisible="type_request_unit == 'hour'">Days</span>
+                    <span class="ml8" invisible="type_request_unit != 'hour'">Hours</span>
+                </div>
+
+                <div class="o_td_label" groups="hr_holidays.group_hr_holidays_user">
+                    <label for="balance_adjustment" string="Balance Adjustment"/>
+                </div>
+                <div name="balance_adjustment_display" groups="hr_holidays.group_hr_holidays_user">
+                    <field name="balance_adjustment" nolabel="1" style="width: 6ch;" readonly="state == 'refuse'"/>
+                    <span class="ml8" invisible="type_request_unit == 'hour'">Days</span>
+                    <span class="ml8" invisible="type_request_unit != 'hour'">Hours</span>
+                </div>
+
+                <div class="o_td_label">
+                    <label for="remaining_balance" string="Remaining Balance" class="fw-bold"/>
+                </div>
+                <div name="remaining_balance_display">
+                    <field name="remaining_balance" nolabel="1" style="width: 6ch;" class="fw-bold"
+                           readonly="not is_officer or state == 'refuse'"/>
+                    <span class="ml8 fw-bold" invisible="type_request_unit == 'hour'">Days</span>
+                    <span class="ml8 fw-bold" invisible="type_request_unit != 'hour'">Hours</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Allocation List/Tree View Extension -->
+    <record id="hr_leave_allocation_view_tree_inherit_balance" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.view.list.inherit.balance</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='duration_display']" position="after">
+                <field name="leaves_taken" string="Taken" optional="show"/>
+                <field name="balance_adjustment" string="Adjustment" optional="show"
+                       groups="hr_holidays.group_hr_holidays_user"/>
+                <field name="remaining_balance" string="Remaining Balance" optional="show" class="fw-bold"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
